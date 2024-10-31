@@ -1,4 +1,5 @@
 using System;
+using System.Formats.Asn1;
 
 namespace calculator
 {
@@ -49,6 +50,53 @@ namespace calculator
     // Calculator class to perform operations
     public class Calculator
     {
+        public double Calculate(double num1, string op, double num2) {
+            if (op == "+") {
+                return num1 + num2;
+            } 
+            else if (op == "-") {
+                return num1 - num2;
+            } 
+            else if (op == "*") {
+                return num1 * num2;
+            } 
+            else if (op == "/") {
+                if (num2 != 0) {
+                    return num1 / num2;
+                } else {
+                    throw new DivideByZeroException("Division by zero is not allowed");
+                }
+            } 
+            else if (op == "**") {
+                if (num2 != (int)num2) {
+                    throw new FormatException("Exponent should be integers");
+                }
+
+                double temp = 1f;
+                if (num2 >= 0) {
+                    for (int i = 0; i < num2; i++) {
+                        temp *= num1;
+                    }
+                } 
+                else {
+                    num2 = -num2;
+                    for (int i = 0; i < num2; i++) {
+                        temp /= num1;
+                    }
+                }
+
+                return temp;
+            }
+            else if (op == "%"){
+                if (num1 != (int)num1 || num2 != (int)num2) {
+                    throw new FormatException("Numbers should be integers");
+                }
+                return num1 - num2*((int)num1/(int)num2); // 이게 맞나..?
+            }
+            else {
+                throw new InvalidOperationException("Invalid operator");
+            }
+        }
         // ---------- TODO ----------
         
         // --------------------
