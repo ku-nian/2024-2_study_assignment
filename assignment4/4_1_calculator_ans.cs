@@ -50,6 +50,15 @@ namespace calculator
     // Calculator class to perform operations
     public class Calculator
     {
+        public int gcd(int a, int b) {
+            int c = a % b;
+            while (c != 0) {
+                a = b;
+                b = c;
+                c = a % b;
+            }
+            return b;
+        }
         public double Calculate(double num1, string op, double num2) {
             if (op == "+") {
                 return num1 + num2;
@@ -92,6 +101,20 @@ namespace calculator
                     throw new FormatException("Numbers should be integers");
                 }
                 return num1 % num2;
+            }
+            else if (op == "G") {
+                if (num1 != (int)num1 || num2 != (int)num2) {
+                    throw new FormatException("Numbers should be integers");
+                }
+
+                return gcd((int)num1, (int)num2);
+            }
+            else if (op == "L") {
+                if (num1 != (int)num1 || num2 != (int)num2) {
+                    throw new FormatException("Numbers should be integers");
+                }
+
+                return (int)num1 * (int)num2 / gcd((int)num1, (int)num2);
             }
             else {
                 throw new InvalidOperationException("Invalid operator");
