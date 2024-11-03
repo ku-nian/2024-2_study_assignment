@@ -91,7 +91,7 @@ namespace calculator
                 if (num1 != (int)num1 || num2 != (int)num2) {
                     throw new FormatException("Numbers should be integers");
                 }
-                return num1 - num2*((int)num1/(int)num2); // 이게 맞나..?
+                return num1 % num2;
             }
             else {
                 throw new InvalidOperationException("Invalid operator");
