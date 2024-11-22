@@ -203,6 +203,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MyText
       objectReference: {fileID: 0}
+    - target: {fileID: 1425994916598521872, guid: 2a3ee4b17c4a36646b0c4adce3211e40, type: 3}
+      propertyPath: m_Text
+      value: Text
+      objectReference: {fileID: 0}
     - target: {fileID: 2510881212850449647, guid: 2a3ee4b17c4a36646b0c4adce3211e40, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -229,7 +233,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2510881212850449647, guid: 2a3ee4b17c4a36646b0c4adce3211e40, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 200
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 2510881212850449647, guid: 2a3ee4b17c4a36646b0c4adce3211e40, type: 3}
       propertyPath: m_SizeDelta.y

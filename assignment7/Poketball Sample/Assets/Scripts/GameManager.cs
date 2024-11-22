@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit)) {
-                Debug.Log(hit.point);
+                // Debug.Log(hit.point);
                 ShootBallTo(hit.point);
             }
         }
@@ -130,10 +130,12 @@ public class GameManager : MonoBehaviour
         // 힘은 CalcPower 함수로 계산하고, y축 방향 힘은 0으로 한다.
         // ForceMode.Impulse를 사용한다.
         // ---------- TODO ---------- 
-        Vector3 displacement = targetPos - PlayerBall.transform.position;
-        displacement.y = 0;
-        float force = CalcPower(displacement);
-        PlayerBall.GetComponent<Rigidbody>().AddForce(displacement, ForceMode.Impulse); //
+        if (PlayerBall) {
+            Vector3 displacement = targetPos - PlayerBall.transform.position;
+            displacement.y = 0;
+            float force = CalcPower(displacement);
+            PlayerBall.GetComponent<Rigidbody>().AddForce(displacement, ForceMode.Impulse);
+        }
         // -------------------- 
     }
     
@@ -143,7 +145,7 @@ public class GameManager : MonoBehaviour
         // "{ballName} falls"을 1초간 띄운다.
         // ---------- TODO ---------- 
         if (ballName == "PlayerBall") {
-            MyUIManager.DisplayText($"0 falls", 1f);
+            MyUIManager.DisplayText($"GameOver", 1f);
         } else {
             MyUIManager.DisplayText($"{ballName} falls", 1f);
         }

@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
         // ---------- TODO ---------- 
         if (NowCoroutine != null) {
             StopCoroutine(NowCoroutine);
+            // Debug.Log("Stop and run");
         }
         NowCoroutine = StartCoroutine(DisplayTextCoroutine(text, duration));
         // -------------------- 
