@@ -134,7 +134,7 @@ public class GameManager : MonoBehaviour
             Vector3 displacement = targetPos - PlayerBall.transform.position;
             displacement.y = 0;
             float force = CalcPower(displacement);
-            PlayerBall.GetComponent<Rigidbody>().AddForce(displacement, ForceMode.Impulse);
+            PlayerBall.GetComponent<Rigidbody>().AddForce(force * displacement.normalized, ForceMode.Impulse);
         }
         // -------------------- 
     }
