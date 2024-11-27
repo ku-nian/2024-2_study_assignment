@@ -35,7 +35,13 @@ public class GameManager : MonoBehaviour
     {
         // 8x8로 타일들을 배치
         // --- TODO ---
-        
+        for (int i = 0; i < Utils.FieldWidth; i++) {
+            for (int j = 0; j < Utils.FieldHeight; j++) {
+                Tile tile = Instantiate(TilePrefab).GetComponent<Tile>();
+                tile.Set((i,j));
+                Tiles[i,j] = tile;
+            }
+        }
         // ------
 
         PlacePieces(1);
@@ -46,7 +52,16 @@ public class GameManager : MonoBehaviour
     {
         // 체스 말들을 배치
         // --- TODO ---
-        
+        int j;
+        j = (direction > 0) ? 0 : 8;
+        for (int i = 0; i < Utils.FieldWidth; i++) {
+            PlacePiece(1,(i,j),direction); //
+        }
+
+        j = (direction > 0) ? 1 : 7;
+        for (int i = 0; i < Utils.FieldWidth; i++) {
+            PlacePiece(0,(i,j),direction); //
+        }
         // ------
     }
 
@@ -54,7 +69,10 @@ public class GameManager : MonoBehaviour
     {
         // 체스 말 하나를 배치 후 initialize
         // --- TODO ---
-        
+        GameObject PiecePrefab = PiecePrefabs[pieceType];
+        Piece piece = Instantiate(PiecePrefab).GetComponent<Piece>();
+        piece.initialize(pos,direction);
+        return piece;
         // ------
     }
 
@@ -88,7 +106,8 @@ public class GameManager : MonoBehaviour
     {
         // 턴을 변경하고, UI에 표시
         // --- TODO ---
-        
+        CurrentTurn = -CurrentTurn; //?
+        uiManager.UpdateTurn(CurrentTurn);
         // ------
     }
 }

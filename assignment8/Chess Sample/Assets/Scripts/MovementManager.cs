@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 
 public class MovementManager : MonoBehaviour
@@ -22,7 +23,16 @@ public class MovementManager : MonoBehaviour
         // 보드에 있는지, 다른 piece에 의해 막히는지 등을 체크
         // 폰에 대한 예외 처리를 적용
         // --- TODO ---
-        
+        (int posX, int posY) = piece.MyPos; // position
+        (int incX, int incY) = (moveInfo.dirX,moveInfo.dirY); // increment
+        for (int i = 0; i < moveInfo.distance; i++) {
+            posX += incX;
+            posY += incY;
+            if (gameManager.Pieces[incX,incY] != null) {
+                return false;
+            }
+        }
+        return true;
         // ------
     }
 
@@ -80,7 +90,11 @@ public class MovementManager : MonoBehaviour
 
         // 왕이 지금 체크 상태인지를 리턴
         // --- TODO ---
-        
+        if (true) { //
+            return true; //
+        } else { //
+            return false; //
+        }
         // ------
     }
 

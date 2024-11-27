@@ -58,7 +58,10 @@ public class ClickHandler : MonoBehaviour
             // piece의 이동을 검증하고, 이동시킴
             // effect를 초기화
             // --- TODO ---
-            
+            if (gameManager.CurrentTurn == selectedPiece.PlayerDirection) {
+                gameManager.Move(selectedPiece,boardPos);
+            }
+            gameManager.ClearEffects();
             // ------
         }
     }

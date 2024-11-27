@@ -17,7 +17,11 @@ public class Tile : MonoBehaviour
     {
         // targetPos로 이동시키고, 색깔을 지정
         // --- TODO ---
-        
+        transform.position = Utils.ToRealPos(targetPos);
+        name = $"{targetPos}";
+        if ((targetPos.Item1 + targetPos.Item2) % 2 == 0) {
+            MySpriteRenderer.color = tileColor;
+        }
         // ------
     }
 }

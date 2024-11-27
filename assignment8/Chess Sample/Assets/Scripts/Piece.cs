@@ -38,7 +38,7 @@ public abstract class Piece : MonoBehaviour
     {
         // 말을 이동시킴
         // --- TODO ---
-        
+        transform.position = Utils.ToRealPos(targetPos);
         // ------
     }
 
