@@ -8,6 +8,7 @@ public class King : Piece
     public override MoveInfo[] GetMoves()
     {
         // --- TODO ---
+        
         // ------
     }
 }

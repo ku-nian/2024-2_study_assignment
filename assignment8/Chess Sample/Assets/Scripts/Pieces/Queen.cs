@@ -7,6 +7,7 @@ public class Queen : Piece
     public override MoveInfo[] GetMoves()
     {
         // --- TODO ---
+        
         // ------
     }
 }

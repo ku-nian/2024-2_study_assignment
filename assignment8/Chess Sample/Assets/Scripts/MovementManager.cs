@@ -7,8 +7,8 @@ public class MovementManager : MonoBehaviour
     private GameManager gameManager;
     private GameObject effectPrefab;
     private Transform effectParent;
-    private List<GameObject> currentEffects = new List<GameObject>();
-
+    private List<GameObject> currentEffects = new List<GameObject>();   // 현재 effect들을 저장할 리스트
+    
     public void Initialize(GameManager gameManager, GameObject effectPrefab, Transform effectParent)
     {
         this.gameManager = gameManager;
@@ -26,6 +26,7 @@ public class MovementManager : MonoBehaviour
         // ------
     }
 
+    // 체크를 제외한 상황에서 가능한 움직임인지를 검증
     private bool IsValidMoveWithoutCheck(Piece piece, (int, int) targetPos)
     {
         if (!Utils.IsInBoard(targetPos) || targetPos == piece.MyPos) return false;
@@ -39,6 +40,7 @@ public class MovementManager : MonoBehaviour
         return false;
     }
 
+    // 체크를 포함한 상황에서 가능한 움직임인지를 검증
     public bool IsValidMove(Piece piece, (int, int) targetPos)
     {
         if (!IsValidMoveWithoutCheck(piece, targetPos)) return false;
@@ -61,6 +63,7 @@ public class MovementManager : MonoBehaviour
         return isValid;
     }
 
+    // 체크인지를 확인
     private bool IsInCheck(int playerDirection)
     {
         (int, int) kingPos = (-1, -1); // 왕의 위치
@@ -79,6 +82,7 @@ public class MovementManager : MonoBehaviour
         }
 
         // 왕이 지금 체크 상태인지를 리턴
+        // gameManager.Pieces에서 Piece들을 참조하여 움직임을 확인
         // --- TODO ---
         
         // ------
@@ -89,11 +93,15 @@ public class MovementManager : MonoBehaviour
         ClearEffects();
 
         // 가능한 움직임을 표시
+        // IsValidMove를 사용
+        // effectPrefab을 effectParent의 자식으로 생성하고 위치를 적절히 설정
+        // currentEffects에 effectPrefab을 추가
         // --- TODO ---
         
         // ------
     }
 
+    // 효과 비우기
     public void ClearEffects()
     {
         foreach (var effect in currentEffects)
