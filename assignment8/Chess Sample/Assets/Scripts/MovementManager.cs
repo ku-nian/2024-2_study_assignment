@@ -23,16 +23,52 @@ public class MovementManager : MonoBehaviour
         // 보드에 있는지, 다른 piece에 의해 막히는지 등을 체크
         // 폰에 대한 예외 처리를 적용
         // --- TODO ---
+        bool wasItPiece = false;
         (int posX, int posY) = piece.MyPos; // position
         (int incX, int incY) = (moveInfo.dirX,moveInfo.dirY); // increment
-        for (int i = 0; i < moveInfo.distance; i++) {
-            posX += incX;
-            posY += incY;
-            if (gameManager.Pieces[incX,incY] != null) {
-                return false;
+
+        if (piece is Pawn) {
+            if (incX == 0) {
+                for (int i = 0; i < moveInfo.distance; i++) {
+                    posX += incX;
+                    posY += incY;
+                    if (!Utils.IsInBoard((posX, posY))) return false;
+                    // Debug.Log((i,posX,posY,incY));
+                    Piece targetPiece = gameManager.Pieces[posX,posY];
+                    if (targetPiece) return false;
+                }
+            }
+            else {
+                posX += incX;
+                posY += incY;
+                if (!Utils.IsInBoard((posX,posY))) return false;
+                Piece targetPiece = gameManager.Pieces[posX,posY];
+                if (targetPiece == null || targetPiece.PlayerDirection == piece.PlayerDirection) return false;
             }
         }
-        return true;
+        else {
+            for (int i = 0; i < moveInfo.distance; i++) {
+                posX += incX;
+                posY += incY;
+
+                // 상대방 기물을 만났던 경우, 상대방 기물이 있는 자리까지만 움직일 수 있고, 현재 자리까지는 못 옴
+                if (!Utils.IsInBoard((posX, posY)) || wasItPiece) return false;
+                
+
+                Piece targetPiece = gameManager.Pieces[posX,posY];
+                if (targetPiece) {
+                    if (targetPiece.PlayerDirection == piece.PlayerDirection) { // 자신 기물인 경우, 자신 기물은 먹을 수 없으므로 return false
+                        return false;
+                    }
+                    wasItPiece = true;
+                }
+            }
+        }
+
+        if (targetPos == (posX, posY)) {
+            return true;
+        }
+        return false;
         // ------
     }
 
@@ -74,7 +110,7 @@ public class MovementManager : MonoBehaviour
     }
 
     // 체크인지를 확인
-    private bool IsInCheck(int playerDirection)
+    public bool IsInCheck(int playerDirection) //
     {
         (int, int) kingPos = (-1, -1); // 왕의 위치
         for (int x = 0; x < Utils.FieldWidth; x++)
@@ -94,13 +130,33 @@ public class MovementManager : MonoBehaviour
         // 왕이 지금 체크 상태인지를 리턴
         // gameManager.Pieces에서 Piece들을 참조하여 움직임을 확인
         // --- TODO ---
-        if (true) { //
-            return true; //
-        } else { //
-            return false; //
+        foreach (Piece piece in gameManager.Pieces) {
+            if (piece != null && piece.PlayerDirection != playerDirection) {
+                if (IsValidMoveWithoutCheck(piece, kingPos)) { //
+                    return true;
+                }
+            }
         }
+        return false;
         // ------
     }
+
+    public bool IsInMate(int playerDirection) { // 움직이면 check인 경우(stalemate, checkmate)
+        foreach (Piece piece in gameManager.Pieces) {
+            if (piece != null && piece.PlayerDirection == playerDirection) { //
+                foreach (MoveInfo move in piece.GetMoves()) {
+                    (int x, int y) = piece.MyPos;
+                    (int, int) targetPos = (x + move.dirX * move.distance, y + move.dirY * move.distance);
+                    if (IsValidMove(piece, targetPos)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+
 
     public void ShowPossibleMoves(Piece piece)
     {
@@ -111,7 +167,15 @@ public class MovementManager : MonoBehaviour
         // effectPrefab을 effectParent의 자식으로 생성하고 위치를 적절히 설정
         // currentEffects에 effectPrefab을 추가
         // --- TODO ---
-        
+        (int x, int y) = piece.MyPos;
+        foreach (MoveInfo move in piece.GetMoves()) {
+            (int, int) targetPos = (x + move.dirX * move.distance, y + move.dirY * move.distance);
+            if (IsValidMove(piece, targetPos)) {
+                GameObject effect = Instantiate(effectPrefab, effectParent);
+                effect.transform.localPosition = Utils.ToRealPos(targetPos);
+                currentEffects.Add(effect);
+            }
+        }
         // ------
     }
 

@@ -7,8 +7,8 @@ public class Queen : Piece
     public override MoveInfo[] GetMoves()
     {
         // --- TODO ---
-        MoveInfo[] ret = new MoveInfo[64];
         int limit = (Utils.FieldWidth > Utils.FieldHeight) ? Utils.FieldHeight : Utils.FieldWidth;
+        MoveInfo[] ret = new MoveInfo[8*(limit-1)];
         for (int i = 0; i < 8; i++) {
             int a = 0, b = 0;
             switch (i%4) {
@@ -29,8 +29,8 @@ public class Queen : Piece
                 a = -a;
                 b = -b;
             }
-            for (int j = 0; j < limit; j++) {
-                ret[i*limit+j] = new MoveInfo(a,b,j);
+            for (int j = 1; j < limit; j++) {
+                ret[i*(limit-1)+j-1] = new MoveInfo(a,b,j);
             }
         }
         return ret;

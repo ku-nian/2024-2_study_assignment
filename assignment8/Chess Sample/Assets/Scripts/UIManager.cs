@@ -11,6 +11,9 @@ public class UIManager : MonoBehaviour
     private float MessageTimer = 0f;
     private Coroutine CurrentMessage;
 
+    void Awake() {
+        MessageText.text = "";
+    }
     void Update()
     {
         if (MessageTimer > 0)
@@ -57,5 +60,10 @@ public class UIManager : MonoBehaviour
     public void ShowCheckmate(int winner)
     {
         ShowMessage($"{(winner == 1 ? "White" : "Black")} wins by checkmate!", float.MaxValue);
+    }
+
+    public void ShowStalemate()
+    {
+        ShowMessage("Draw", float.MaxValue);
     }
 }
