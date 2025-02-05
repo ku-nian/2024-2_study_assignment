@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class Queen : Piece
 {
+    MoveInfo[] moveTable;
     public override MoveInfo[] GetMoves()
     {
         // --- TODO ---
+        if (moveTable != null) return moveTable;
+
         int limit = (Utils.FieldWidth > Utils.FieldHeight) ? Utils.FieldHeight : Utils.FieldWidth;
         MoveInfo[] ret = new MoveInfo[8*(limit-1)];
         for (int i = 0; i < 8; i++) {
@@ -33,7 +36,8 @@ public class Queen : Piece
                 ret[i*(limit-1)+j-1] = new MoveInfo(a,b,j);
             }
         }
-        return ret;
+        moveTable = ret;
+        return moveTable;
         // ------
     }
 }

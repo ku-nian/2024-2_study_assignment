@@ -5,9 +5,12 @@ using UnityEngine;
 // Rook.cs
 public class Rook : Piece
 {
+    MoveInfo[] moveTable = null;
     public override MoveInfo[] GetMoves()
     {
         // --- TODO ---
+        if (moveTable != null) return moveTable;
+
         int limit = (Utils.FieldWidth > Utils.FieldHeight) ? Utils.FieldHeight : Utils.FieldWidth;
         MoveInfo[] ret = new MoveInfo[4 * (limit-1)];
         for (int i = 0; i < 4; i++) {
@@ -31,7 +34,8 @@ public class Rook : Piece
                 ret[i*(limit-1)+j-1] = new MoveInfo(a,b,j);
             }
         }
-        return ret;
+        moveTable = ret;
+        return moveTable;
         // ------
     }
 }

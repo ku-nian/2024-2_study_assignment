@@ -111,17 +111,46 @@ public class GameManager : MonoBehaviour
         // Piece를 이동시킴
         // --- TODO ---
         // var test = piece.MyPos;
-        Piece originalPiece = Pieces[targetPos.Item1, targetPos.Item2];
-        if (originalPiece) {
-            // Debug.Log(originalPiece);
-            Destroy(originalPiece.gameObject);
-            // Debug.Log("destroy");
-            // Debug.Log(originalPiece);
+        if (movementManager.IsValidCastlingWithoutCheck(piece, targetPos)) {
+            var rook = Pieces[0, targetPos.Item2];
+            var targetRookPos = (targetPos.Item1 + 1, targetPos.Item2);
+
+            if (targetPos.Item1 >= piece.MyPos.Item1) {
+                rook = Pieces[Utils.FieldWidth - 1, targetPos.Item2];
+                targetRookPos = (targetPos.Item1 - 1, targetPos.Item2); // king이 이동할 위치를 기준으로 rook 위치 지정
+            }
+            // Debug.Log((targetPos, rook, targetRookPos));
+
+            Pieces[rook.MyPos.Item1, rook.MyPos.Item2] = null;
+            rook.MoveTo(targetRookPos);
+
+
+            (int x, int y) = piece.MyPos;
+            Pieces[x, y] = null;
+            piece.MoveTo(targetPos);
+
+            movementManager.UpdateCastling(piece, (x,y));
         }
-        (int x, int y) = piece.MyPos; // 원래 있던 위치에 있는 Piece를 Pieces에서만 삭제
-        Pieces[x, y] = null;
-        piece.MoveTo(targetPos);
-        // Debug.Log(targetPos);
+        else {
+            if (movementManager.IsInEnPassant(targetPos)) {
+                movementManager.DestroyEnPassantPrey(targetPos);
+            }
+            else {
+                Piece originalPiece = Pieces[targetPos.Item1, targetPos.Item2];
+                if (originalPiece) {
+                    Destroy(originalPiece.gameObject);
+                }
+            }
+
+            (int x, int y) = piece.MyPos; // 원래 있던 위치에 있는 Piece를 Pieces에서만 삭제
+            Pieces[x, y] = null;
+            piece.MoveTo(targetPos);
+
+            movementManager.UpdateEnPassantPrey(piece, (x,y));
+            movementManager.UpdateCastling(piece, (x,y));
+        }
+
+        // Debug.Log((Pieces[6,0], Pieces[7,0]));
         ChangeTurn();
         if (movementManager.IsInMate(CurrentTurn)) {
             if (movementManager.IsInCheck(CurrentTurn)) {
